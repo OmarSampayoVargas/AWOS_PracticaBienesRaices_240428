@@ -12,6 +12,7 @@ En este proyecto se prondan en ejemplo práctico la creación de API's propias a
 El proyecto estará basado en una Arquitectura SOA (Service Oriented Architecture), el Patrón de Diseño MVC (Model, View, Controler) y servicios API REST, deberá gestionarse debidamente en el uso del contro de versiones y ramas progresivas del desarrollo del mismo.</p>
 
 
+
 ### Tabla de Secciones
 
 |No.|Descripción|Potenciador|Estatus|
