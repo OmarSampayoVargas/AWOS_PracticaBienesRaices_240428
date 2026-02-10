@@ -1,0 +1,35 @@
+{
+  "name": "awos_practicabienesraices_240428",
+  "version": "1.0.0",
+  "description": "Sistema de bienes raices basado en nodeJS, MVC Y API REST",
+  "keywords": [
+    "MVC",
+    "Sequelize",
+    "NodeJS",
+    "API",
+    "REST",
+    "TailwindCSS",
+    "Leaflet"
+  ],
+  "homepage": "https://github.com/OmarSampayoVargas/AWOS_PracticaBienesRaices_240428#readme",
+  "bugs": {
+    "url": "https://github.com/OmarSampayoVargas/AWOS_PracticaBienesRaices_240428/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/OmarSampayoVargas/AWOS_PracticaBienesRaices_240428.git"
+  },
+  "license": "ISC",
+  "author": "Omar de jesus Sampayo Vargas",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon index.js"
+  },
+  "dependencies": {
+    "express": "^5.2.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.11"
+  }
+}
