@@ -1,16 +1,14 @@
 import express from 'express'
+import { formularioLogin, formularioRegistro } from '../contollers/usuarioController.js'
 
 const router = express.Router();
 
+
 // Definir los ENDPOINTS
 // GET
-router.get("/", (req, res)=>{
-    console.log("Se esta procesando una petición del tipo GET")
-    res.json({
-        status:200, 
-        message: "Bienvenido al Sistema de Bienes Raices"
-    })
-})
+router.get("/login", formularioLogin)
+router.get("/registro", formularioRegistro)
+
 
 
 //POST
