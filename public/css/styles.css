@@ -399,13 +399,6 @@
       }
     }
   }
-  .hover\:bg-orange-400 {
-    &:hover {
-      @media (hover: hover) {
-        background-color: var(--color-orange-400);
-      }
-    }
-  }
   .hover\:text-white {
     &:hover {
       @media (hover: hover) {
@@ -424,13 +417,6 @@
     &:hover {
       @media (hover: hover) {
         text-decoration-color: var(--color-green-400);
-      }
-    }
-  }
-  .hover\:decoration-orange-400 {
-    &:hover {
-      @media (hover: hover) {
-        text-decoration-color: var(--color-orange-400);
       }
     }
   }
