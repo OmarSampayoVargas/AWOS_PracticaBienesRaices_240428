@@ -1,90 +1,108 @@
 import express from "express";
+import { body } from "express-validator";
+
 import {
   formularioLogin,
   formularioRegistro,
-  formularioRecuperacion
+  formularioRecuperacion,
+  registrarUsuario,
+  autenticarUsuario,
+  solicitarRecuperacionPassword,
+  paginaConfirmacion,
+  formularioActualizacionPassword,
+  resetearPassword,
 } from "../controllers/usuarioController.js";
 
 const router = express.Router();
 
-// GET (PUG)
+// GET
 router.get("/login", formularioLogin);
 router.get("/registro", formularioRegistro);
 router.get("/recuperarPassword", formularioRecuperacion);
+router.get("/confirma/:token", paginaConfirmacion);
+router.get("/actualizarPassword/:token", formularioActualizacionPassword);
 
-// POST
-router.post("/createUser", (req, res) => {
-  console.log("Se está procesando la petición del tipo POST");
+// POST REGISTRO
+router.post(
+  "/registro",
+  body("nombreUsuario")
+    .trim()
+    .notEmpty()
+    .withMessage("El nombre de la persona no puede ser vacío"),
 
-  const body = req.body || {};
+  body("emailUsuario")
+    .trim()
+    .notEmpty()
+    .withMessage("El correo electrónico no puede ser vacío")
+    .isEmail()
+    .withMessage("El correo electrónico no tiene un formato adecuado"),
 
-  const nuevoUsuario = {
-    nombre: body.nombre || "Omar de jesus sampayo Vargas",
-    correo: body.correo || "omasampayovar@gmail.com",
-  };
+  body("passwordUsuario")
+    .trim()
+    .notEmpty()
+    .withMessage("La contraseña parece estar vacía")
+    .isLength({ min: 8, max: 30 })
+    .withMessage("La longitud de la contraseña debe ser entre 8 y 30 caractéres"),
 
-  res.json({
-    status: 200,
-    message: `Se ha solicitado la creación del usuario con el nombre ${nuevoUsuario.nombre} y el correo ${nuevoUsuario.correo}`,
-  });
-});
+  body("confirmarPasswordUsuario")
+    .trim()
+    .notEmpty()
+    .withMessage("La confirmación de contraseña es obligatoria")
+    .custom((value, { req }) => value === req.body.passwordUsuario)
+    .withMessage("Ambas contraseñas deben ser iguales"),
 
-// ✅ POST para recuperar password (para que el form action funcione)
-router.post("/recuperar", (req, res) => {
-  console.log("Se está procesando recuperación de contraseña");
+  registrarUsuario
+);
 
-  const { emailUsuario } = req.body || {};
+// POST LOGIN
+router.post(
+  "/login",
+  body("emailUsuario")
+    .trim()
+    .notEmpty()
+    .withMessage("El correo electrónico no puede ser vacío")
+    .isEmail()
+    .withMessage("El correo electrónico no tiene un formato adecuado"),
 
-  res.json({
-    status: 200,
-    message: `Solicitud de recuperación enviada para: ${emailUsuario}`,
-  });
-});
+  body("passwordUsuario")
+    .trim()
+    .notEmpty()
+    .withMessage("La contraseña es obligatoria"),
 
-// PUT
-router.put("/actualizarOferta", (req, res) => {
-  console.log("Se está procesando la petición del tipo PUT");
+  autenticarUsuario
+);
 
-  const ofertaCompra = {
-    clienteID: 2401,
-    propiedad: 1305,
-    montoOfertado: "$125,300.00",
-  };
+// POST RECUPERAR PASSWORD
+router.post(
+  "/recuperarPassword",
+  body("emailUsuario")
+    .trim()
+    .notEmpty()
+    .withMessage("El correo electrónico no puede ser vacío")
+    .isEmail()
+    .withMessage("El correo electrónico no tiene un formato adecuado"),
 
-  const nuevaOferta = {
-    clienteID: 1586,
-    propiedad: 1305,
-    montoOfertado: "$130,000.00",
-  };
+  solicitarRecuperacionPassword
+);
 
-  res.json({
-    status: 200,
-    message: `Se ha actualizado la mejor oferta de ${ofertaCompra.montoOfertado} a ${nuevaOferta.montoOfertado} por el cliente con ID ${nuevaOferta.clienteID}`,
-  });
-});
+// POST NUEVA PASSWORD
+router.post(
+  "/actualizarPassword/:token",
+  body("passwordUsuario")
+    .trim()
+    .notEmpty()
+    .withMessage("La contraseña no puede ir vacía")
+    .isLength({ min: 8 })
+    .withMessage("La contraseña debe tener mínimo 8 caracteres"),
 
-// PATCH
-router.patch("/actualizarPassword/:nuevaPassword", (req, res) => {
-  console.log("Se está procesando la petición del tipo PATCH");
+  body("confirmarPasswordUsuario")
+    .trim()
+    .notEmpty()
+    .withMessage("Debes confirmar la contraseña")
+    .custom((value, { req }) => value === req.body.passwordUsuario)
+    .withMessage("Ambas contraseñas deben ser iguales"),
 
-  const { nuevaPassword } = req.params;
-
-  res.json({
-    status: 200,
-    message: `Se ha actualizado la contraseña a ${nuevaPassword}`,
-  });
-});
-
-// DELETE
-router.delete("/borrarPropiedad/:id", (req, res) => {
-  console.log("Se está procesando la petición del tipo DELETE");
-
-  const { id } = req.params;
-
-  res.json({
-    status: 200,
-    message: `Se ha eliminado la propiedad con el ID ${id}`,
-  });
-});
+  resetearPassword
+);
 
 export default router;
